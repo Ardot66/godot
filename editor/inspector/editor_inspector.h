@@ -183,6 +183,7 @@ private:
 	bool can_favorite = false;
 	bool favorited = false;
 
+	bool is_array_element = false;
 	bool use_folding = false;
 	bool draw_top_bg = true;
 
@@ -251,6 +252,9 @@ public:
 
 	void set_draw_background(bool p_draw_background);
 	bool is_draw_background() const;
+
+	void set_is_array_element(bool p_is_array_element);
+	bool get_is_array_element() const;
 
 	Object *get_edited_object();
 	StringName get_edited_property() const;

@@ -921,6 +921,15 @@ bool EditorProperty::is_draw_background() const {
 	return draw_background;
 }
 
+void EditorProperty::set_is_array_element(bool p_is_array_element) {
+	print_line("yep, I'm in an array!");
+	is_array_element = p_is_array_element;
+}
+
+bool EditorProperty::get_is_array_element() const {
+	return is_array_element;
+}
+
 void EditorProperty::set_checkable(bool p_checkable) {
 	checkable = p_checkable;
 	queue_redraw();
@@ -1411,7 +1420,24 @@ Control *EditorProperty::make_custom_tooltip(const String &p_text) const {
 
 		const EditorInspector *inspector = get_parent_inspector();
 		if (inspector) {
-			const String custom_description = inspector->get_custom_property_description(p_text);
+			String override_text;
+			// If the property is part of an array, we need to strip the indices to get the correct docs.
+			if (get_is_array_element()) {
+				int number_end = -1;
+				for (int i = p_text.length() - 1; i >= 0; i--) {
+					if (is_digit(p_text[i])) {
+						if (number_end == -1) {
+							number_end = i;
+						}
+					} else if (number_end != -1) {
+						override_text = p_text.substr(0, i + 1) + p_text.substr(number_end + 1, p_text.length() - number_end);
+						break;
+					}
+				}
+			}
+
+			print_line("Tooltip: ", override_text.is_empty() ? p_text : override_text);
+			const String custom_description = inspector->get_custom_property_description(override_text.is_empty() ? p_text : override_text);
 			if (!custom_description.is_empty()) {
 				if (!prologue.is_empty()) {
 					prologue += '\n';
@@ -4756,8 +4782,27 @@ void EditorInspector::update_tree() {
 						}
 					} else {
 						for (int i = 0; i < F->value.properties.size(); i++) {
-							String doc_path_current = "class_property:" + F->value.name + ":" + F->value.properties[i].name;
+							String name = F->value.properties[i].name;
+							// If the property is part of an array, we need to strip the indices to get the correct docs.
+							if (array_index != -1) {
+								int number_end = -1;
+								for (int i = name.length() - 1; i >= 0; i--) {
+									if (is_digit(name[i])) {
+										if (number_end == -1) {
+											number_end = i;
+										}
+									} else if (number_end != -1) {
+										name = name.substr(0, i + 1) + name.substr(number_end + 1, name.length() - number_end);
+										break;
+									}
+								}
+							}
+
+							String doc_path_current = "class_property:" + F->value.name + ":" + name;
 							if (F->value.properties[i].name == propname.operator String()) {
+								if (array_index != -1) {
+									print_line("Doc path: ", doc_path_current);
+								}
 								doc_path = doc_path_current;
 							}
 						}
@@ -4903,6 +4948,7 @@ void EditorInspector::update_tree() {
 					ep->set_deletable(deletable_properties);
 				}
 
+				ep->set_is_array_element(array_index != -1);
 				ep->set_draw_warning(draw_warning);
 				ep->set_use_folding(use_folding);
 				ep->set_favoritable(can_favorite && !disable_favorite && !ep->is_deletable());
