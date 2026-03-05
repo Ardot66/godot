@@ -319,7 +319,7 @@ Variant _GLOBAL_DEF_ARRAY(PropertyInfo p_info, Vector<ProjectSettings::ArrayElem
 #define GLOBAL_DEF_ARRAY(m_var, m_format...) _GLOBAL_DEF_ARRAY(m_var, Vector<ProjectSettings::ArrayElementFormat>(m_format))
 #define GLOBAL_DEF_ARRAY_RST(m_var, m_format...) _GLOBAL_DEF_ARRAY(m_var, Vector<ProjectSettings::ArrayElementFormat>(m_format), true)
 #define GLOBAL_DEF_ARRAY_NOVAL(m_var, m_format...) _GLOBAL_DEF_ARRAY(m_var, Vector<ProjectSettings::ArrayElementFormat>(m_format), false, true)
-#define GLOBAL_DEF_ARRAY_RST_NOVAL(m_var, m_format...) _GLOBAL_DEF_ARRAY(m_var, Vector<ProjectSettings::ArrayElementFormat>(m_format))
+#define GLOBAL_DEF_ARRAY_RST_NOVAL(m_var, m_format...) _GLOBAL_DEF_ARRAY(m_var, Vector<ProjectSettings::ArrayElementFormat>(m_format), true, true)
 
 #define GLOBAL_DEF_ARRAY_BASIC(m_var, m_format...) _GLOBAL_DEF_ARRAY(m_var, Vector<ProjectSettings::ArrayElementFormat>(m_format), false, false, true)
 #define GLOBAL_DEF_ARRAY_RST_BASIC(m_var, m_format...) _GLOBAL_DEF_ARRAY(m_var, Vector<ProjectSettings::ArrayElementFormat>(m_format), true, false, true)
