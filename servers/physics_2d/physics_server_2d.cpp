@@ -909,6 +909,8 @@ PhysicsServer2D::PhysicsServer2D() {
 	GLOBAL_DEF(PropertyInfo(Variant::FLOAT, "physics/2d/default_linear_damp", PROPERTY_HINT_RANGE, "-1,100,0.001,or_greater"), 0.1);
 	GLOBAL_DEF(PropertyInfo(Variant::FLOAT, "physics/2d/default_angular_damp", PROPERTY_HINT_RANGE, "-1,100,0.001,or_greater"), 1.0);
 
+	GLOBAL_DEF_ARRAY_BASIC("physics/2d/presets", { ProjectSettings::ArrayElementFormat(PropertyInfo(Variant::STRING_NAME, "name"), ""), ProjectSettings::ArrayElementFormat(PropertyInfo(Variant::INT, "layer", PROPERTY_HINT_LAYERS_2D_PHYSICS), 1), ProjectSettings::ArrayElementFormat(PropertyInfo(Variant::INT, "mask", PROPERTY_HINT_LAYERS_2D_PHYSICS), 1) });
+
 	// PhysicsServer2D
 	GLOBAL_DEF(PropertyInfo(Variant::FLOAT, "physics/2d/sleep_threshold_linear", PROPERTY_HINT_RANGE, "0,10,0.001,or_greater"), 2.0);
 	GLOBAL_DEF(PropertyInfo(Variant::FLOAT, "physics/2d/sleep_threshold_angular", PROPERTY_HINT_RANGE, "0,90,0.1,radians_as_degrees"), Math::deg_to_rad(8.0));
